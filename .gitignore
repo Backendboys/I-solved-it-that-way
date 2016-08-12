@@ -27,3 +27,10 @@ server.pid
 !/test/sample/bower.json
 /npm-shrinkwrap.json
 
+target/
+lib_managed/
+src_managed/
+project/boot/
+.history
+.cache
+
