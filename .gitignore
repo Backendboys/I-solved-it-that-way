@@ -1,4 +1,3 @@
-# Ignore Play! working directory #
 bin/
 /db
 .eclipse
@@ -13,3 +12,19 @@ server.pid
 *.eml
 /dist/
 .cache
+
+/node_modules
+/npm-debug.log
+
+/test/assets/package-*/
+/test/assets/temp-*/
+/test/reports
+/test/tmp/
+
+/bower.json
+/component.json
+/bower_components
+/test/sample
+!/test/sample/bower.json
+/npm-shrinkwrap.json
+
