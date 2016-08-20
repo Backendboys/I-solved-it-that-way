@@ -4,7 +4,7 @@ import javax.inject._
 import play.api._
 import play.api.mvc._
 
-case class Questao(codigo: Long, var enunciado: String, var resposta: String)
+import models.Questao
 
 @Singleton
 class ProfController @Inject() extends Controller {
