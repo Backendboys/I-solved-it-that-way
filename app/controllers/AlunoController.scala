@@ -4,10 +4,8 @@ import javax.inject._
 import play.api._
 import play.api.mvc._
 
-case class Questao(codigo: Long, var enunciado: String, var resposta: String)
-
 @Singleton
-class ProfController @Inject() extends Controller {
+class AlunoController @Inject() extends Controller {
   var questoes: List[Questao] = Nil;
   var cod = 0
 
@@ -15,10 +13,10 @@ class ProfController @Inject() extends Controller {
     request.body.asFormUrlEncoded.get(field)(0)
   }
 
-  def homeProf = Action { implicit request =>
+  def homeAluno = Action { implicit request =>
     request.session.get("user") match {
     case Some(user) =>
-      Ok(views.html.homeProf(request.session.get("user").getOrElse("")))
+      Ok(views.html.homeAluno(request.session.get("user").getOrElse("")))
     case None       =>
       Unauthorized("Usuário não logado!")
     }
@@ -30,7 +28,7 @@ class ProfController @Inject() extends Controller {
 
   def save = Action { implicit request =>
     questoes = questoes :+ recoverForm('s')
-    Redirect(routes.ProfController.homeProf)
+    Redirect(routes.AlunoController.homeAluno)
   }
 
   def recoverForm(t: Char)(implicit request: Request[AnyContent]) = {
