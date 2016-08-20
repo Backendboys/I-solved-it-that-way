@@ -9,15 +9,14 @@ POST    /login                      controllers.AuthController.auth
 # home professor
 GET     /homep                       controllers.ProfController.homeProf
 # adicionar contato
-GET     /contatos/new               controllers.ProfController.create
-POST    /contatos                   controllers.ProfController.save
-# logout
-GET     /logout                     controllers.ProfController.logout
-
+GET     /questaoes/new               controllers.ProfController.create
+POST    /questaoes                   controllers.ProfController.save
 
 # --- ALUNO ---
 # home
 GET /homea controllers.AlunoController.homeAluno
+# logout
+GET     /logout                     controllers.AuthController.logout
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

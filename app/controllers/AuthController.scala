@@ -17,6 +17,11 @@ class AuthController @Inject() extends Controller {
     Ok(views.html.login(LoginForm.form))
   }
 
+  def logout = Action {
+    Redirect("/")
+      .withNewSession
+  }
+
   def auth = Action { implicit request =>
     LoginForm.form.bindFromRequest.fold(
       formWithErrors => {

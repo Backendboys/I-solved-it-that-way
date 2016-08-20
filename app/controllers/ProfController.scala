@@ -59,10 +59,5 @@ class ProfController @Inject() extends Controller {
     c
   }
 
-  def logout = Action {
-    Redirect("/")
-      .withNewSession
-  }
-
 }
 

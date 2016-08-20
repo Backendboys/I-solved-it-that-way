@@ -10,4 +10,3 @@ class HomeController @Inject() extends Controller {
     Redirect(routes.AuthController.index)
   }
 }
-
