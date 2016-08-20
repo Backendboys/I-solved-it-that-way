@@ -9,8 +9,10 @@ POST    /login                      controllers.AuthController.auth
 # home professor
 GET     /homep                       controllers.ProfController.homeProf
 # adicionar contato
-GET     /questaoes/new               controllers.ProfController.create
-POST    /questaoes                   controllers.ProfController.save
+GET     /questoes/new               controllers.ProfController.create
+GET     /questao/:codigo            controllers.QuestaoController.show(codigo: Long)
+GET     /questao/:codigo/edit       controllers.QuestaoController.edit(codigo: Long)
+POST    /questaoes                  controllers.ProfController.save
 
 # --- ALUNO ---
 # home
