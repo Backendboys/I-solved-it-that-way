@@ -3,6 +3,7 @@ package controllers
 import javax.inject._
 import play.api._
 import play.api.mvc._
+
 import models.Questao
 
 @Singleton
@@ -15,9 +16,9 @@ class ProfController @Inject() extends Controller {
   }
 
   def homeProf = Action { implicit request =>
-    request.session.get("user") match {
+    request.session.get("role") match {
     case Some(user) =>
-      Ok(views.html.homeProf(request.session.get("user").getOrElse("")))
+      Ok(views.html.homeProf(request.session.get("role").getOrElse("")))
     case None       =>
       Unauthorized("Usuário não logado!")
     }
@@ -56,11 +57,6 @@ class ProfController @Inject() extends Controller {
     }
     var c = Questao(cod, enunciado, resposta)
     c
-  }
-
-  def logout = Action {
-    Redirect("/")
-      .withNewSession
   }
 
 }

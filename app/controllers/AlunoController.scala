@@ -15,9 +15,9 @@ class AlunoController @Inject() extends Controller {
   }
 
   def homeAluno = Action { implicit request =>
-    request.session.get("user") match {
+    request.session.get("role") match {
     case Some(user) =>
-      Ok(views.html.homeAluno(request.session.get("user").getOrElse("")))
+      Ok(views.html.homeAluno(request.session.get("role").getOrElse("")))
     case None       =>
       Unauthorized("Usuário não logado!")
     }
