@@ -36,4 +36,3 @@ class HomeController @Inject() extends Controller {
   }
 
 }
-
