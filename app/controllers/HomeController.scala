@@ -16,13 +16,17 @@ class HomeController @Inject() extends Controller {
     Ok(views.html.login())
   }
 
-  def index = Action { implicit request =>
-    //if (usuario == "professor"){
+  def index(usuario: String) = Action { implicit request =>
+    if (usuario == "professor") {
       Redirect(routes.ProfController.homeProf)
       .withSession("user" -> getCampo("usuario"))
-      .flashing(SUCESSO -> "Login realizado com sucesso.")  
-    //}
-
+      .flashing(SUCESSO -> "Login realizado com sucesso.")
+    }
+    else{
+      Redirect(routes.AlunoController.homeAluno)
+      .withSession("user" -> getCampo("usuario"))
+      .flashing(SUCESSO -> "Login realizado com sucesso.")
+    }
   }
 
   def getCampo(field: String) (implicit request: Request[AnyContent]) = {
@@ -30,3 +34,4 @@ class HomeController @Inject() extends Controller {
   }
 
 }
+

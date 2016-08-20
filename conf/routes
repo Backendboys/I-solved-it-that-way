@@ -3,7 +3,7 @@ GET     /                           controllers.HomeController.start
 # Login
 GET     /login                      controllers.HomeController.login
 # Redirecionar para home
-POST     /index                     controllers.HomeController.index
+POST     /index                     controllers.HomeController.index(usuario: String)
 
 # --- PROFESSOR ---
 # home professor
