@@ -3,21 +3,22 @@ GET     /                           controllers.HomeController.start
 # Login
 GET     /login                      controllers.HomeController.login
 # Redirecionar para home
-GET     /index                     controllers.HomeController.index(usuario: String)
+POST     /index                     controllers.HomeController.index
 
 # --- PROFESSOR ---
 # home professor
-GET     /home                       controllers.ProfController.homeProf
+GET     /homeP                       controllers.ProfController.homeProf
 # adicionar contato
-GET     /contatos/new               controllers.ProfController.create
-POST    /contatos                   controllers.ProfController.save
-# logout
-GET     /logout                     controllers.ProfController.logout
-
+GET     /questaoes/new               controllers.ProfController.create
+POST    /questaoes                   controllers.ProfController.save
 
 # --- ALUNO ---
 # home
-GET /home controllers.AlunoController.homeAluno
+GET /homeA 							controllers.AlunoController.homeAluno
+
+
+# logout
+GET     /logout                     controllers.ProfController.logout
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

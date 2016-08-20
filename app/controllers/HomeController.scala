@@ -18,13 +18,13 @@ class HomeController @Inject() extends Controller {
     Ok(views.html.login())
   }
 
-  def index(usuario: String) = Action { implicit request =>
-    if (usuario == "professor") {
+  def index = Action { implicit request =>
+    if (getCampo("usuario") == "professor") {
       Redirect(routes.ProfController.homeProf)
       .withSession("user" -> getCampo("usuario"))
       .flashing(SUCESSO -> "Login realizado com sucesso.")
     }
-    else{
+    else {
       Redirect(routes.AlunoController.homeAluno)
       .withSession("user" -> getCampo("usuario"))
       .flashing(SUCESSO -> "Login realizado com sucesso.")
