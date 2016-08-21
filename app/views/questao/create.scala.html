@@ -1,0 +1,22 @@
+@(questaoForm: Form[models.Questao])
+
+@main("Criar questão") {
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <form role="form" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="form_enunciado">Enunciado</label>
+                    <input name="enunciado" id="form_enunciado" class="form-control" type="text">
+                </div>
+                <div class="form-group">
+                    <label for="form_descricao">Descrição</label>
+                    <textarea rows="10" style="resize: none;" name="descricao" id="form_descricao" class="form-control" type="textarea"></textarea>
+                </div>
+                <div class="form-group"><input name="testes" type="file" multiple></div>
+                <button type="submit" class="btn btn-primary">Adicionar</button>
+            </form>
+        </div>
+    </div>
+</div>
+}

@@ -35,3 +35,4 @@ project/boot/
 .cache
 
 conf/local.conf
+app/testfiles/**/*

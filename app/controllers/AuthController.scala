@@ -30,11 +30,11 @@ class AuthController @Inject() extends Controller {
       userData => {
         userData.role match {
           case "professor" =>
-            Redirect(routes.ProfController.homeProf)
+            Redirect(routes.ProfessorController.home)
             .withSession("role" -> "professor")
             .flashing(SUCESSO -> "Login realizado com sucesso.")
           case "aluno" =>
-            Redirect(routes.AlunoController.homeAluno)
+            Redirect(routes.AlunoController.home)
             .withSession("role" -> "aluno")
             .flashing(SUCESSO -> "Login realizado com sucesso.")
           case _ => Redirect(routes.AuthController.index)

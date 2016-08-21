@@ -1,0 +1,14 @@
+@()(implicit flash: Flash)
+
+@main("Professor") {
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            @flash.get("sucesso").map { mensagem =>
+                  <div class="alert alert-success" role="alert">@mensagem</div>
+                }.getOrElse("")
+            PROFESSOR
+        </div>
+    </div>
+</div>
+}
