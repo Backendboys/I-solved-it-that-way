@@ -1,24 +1,24 @@
 # Endereço inicial
-GET     /                           controllers.HomeController.index
+GET     /                            controllers.HomeController.index
 
 # Login
-GET     /login                      controllers.AuthController.index
-POST    /login                      controllers.AuthController.auth
+GET     /entrar/                     controllers.AuthController.index
+POST    /entrar/                     controllers.AuthController.auth
+
+GET     /questoes/adicionar/         controllers.QuestaoController.add
+POST    /questoes/adicionar/         controllers.QuestaoController.create
+GET     /questoes/:codigo            controllers.QuestaoController.detail(codigo: Long)
+GET     /questoes/:codigo/edit       controllers.QuestaoController.edit(codigo: Long)
 
 # --- PROFESSOR ---
 # home professor
-GET     /homep                       controllers.ProfController.homeProf
-# adicionar contato
-GET     /questoes/new               controllers.ProfController.create
-GET     /questao/:codigo            controllers.QuestaoController.show(codigo: Long)
-GET     /questao/:codigo/edit       controllers.QuestaoController.edit(codigo: Long)
-POST    /questaoes                  controllers.ProfController.save
+GET     /professor/                  controllers.ProfessorController.home
 
 # --- ALUNO ---
 # home
-GET /homea controllers.AlunoController.homeAluno
+GET     /aluno/                      controllers.AlunoController.home
 # logout
-GET     /logout                     controllers.AuthController.logout
+GET     /sair/                       controllers.AuthController.logout
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

@@ -11,6 +11,7 @@ libraryDependencies ++= Seq(
   evolutions,
   cache,
   ws,
+  "com.h2database" % "h2" % "1.3.148",
   "org.postgresql" % "postgresql" % "9.4.1209",
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test
 )

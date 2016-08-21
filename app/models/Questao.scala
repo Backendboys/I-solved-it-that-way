@@ -1,7 +1,9 @@
 package models
 
+import scala.collection.immutable.List
+
 case class Questao(
-  codigo: Long,
+  val codigo: Long,
   var enunciado: String,
-  var resposta: String)
+  var descricao: String)
 
