@@ -9,6 +9,7 @@ GET     /questoes/adicionar/         controllers.QuestaoController.add
 POST    /questoes/adicionar/         controllers.QuestaoController.create
 GET     /questoes/:codigo            controllers.QuestaoController.detail(codigo: Long)
 GET     /questoes/:codigo/edit       controllers.QuestaoController.edit(codigo: Long)
+POST    /questoes/:codigo/edit       controllers.QuestaoController.update(codigo: Long)
 
 # --- PROFESSOR ---
 # home professor
