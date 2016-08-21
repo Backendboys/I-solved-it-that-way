@@ -65,10 +65,18 @@ class QuestaoController @Inject()(db: Database) extends Controller {
           case None => println("Erro ao inserir questão")
         }
 
-        Ok(views.html.questao.create(QuestaoForm.form))
+        Redirect(routes.ProfessorController.home)
 
       }
     )
+  }
+
+  def detail(codigo: Long) = Action { implicit request =>
+    Ok(views.html.questao.detail(codigo))
+  }
+
+  def edit(codigo: Long) = Action { implicit request =>
+    Ok(views.html.questao.edit())
   }
 
 }
