@@ -31,11 +31,11 @@ class AuthController @Inject() extends Controller {
         userData.role match {
           case "professor" =>
             Redirect(routes.ProfessorController.home)
-            .withSession("role" -> "professor")
+              .withSession("role" -> "professor", "nome" -> userData.nome)
             .flashing(SUCESSO -> "Login realizado com sucesso.")
           case "aluno" =>
             Redirect(routes.AlunoController.home)
-            .withSession("role" -> "aluno")
+            .withSession("role" -> "aluno", "nome" -> userData.nome)
             .flashing(SUCESSO -> "Login realizado com sucesso.")
           case _ => Redirect(routes.AuthController.index)
         }

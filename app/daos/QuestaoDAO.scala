@@ -54,6 +54,18 @@ class QuestaoDAO(db: Database) {
     return questao
   }
 
+  def delete(codigo: Long) {
+    val query = f"DELETE FROM Questao WHERE codigo = $codigo"
+    val conn = db.getConnection()
+
+    try {
+      val stmt = conn.createStatement
+      stmt.executeUpdate(query)
+    } finally {
+      conn.close()
+    }
+  }
+
   def insert(enunciado: String, descricao: String): Option[Questao] = {
     val query = "INSERT INTO Questao(enunciado, descricao) VALUES (" +
       f"'$enunciado', '$descricao')"
