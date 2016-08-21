@@ -76,6 +76,11 @@ class QuestaoController @Inject()(db: Database) extends Controller {
     Ok(views.html.questao.edit(QuestaoForm.form, questao, testes))
   }
 
+  def remove(codigo: Long) = Action { implicit request =>
+    new QuestaoDAO(db).delete(codigo)
+    Redirect(routes.ProfessorController.home)
+  }
+
   def update(codigo: Long) = Action { implicit request =>
     val dao = new QuestaoDAO(db)
     val testeDao = new TesteDAO(db)

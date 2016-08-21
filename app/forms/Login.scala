@@ -3,13 +3,14 @@ package forms
 import play.api.data._
 import play.api.data.Forms._
 
-case class LoginData(role: String)
+case class LoginData(nome: String, role: String)
 
 object LoginForm {
 
   val form = Form(
     mapping(
-      "role" -> text
+      "nome" -> nonEmptyText,
+      "role" -> nonEmptyText
     )(LoginData.apply)(LoginData.unapply)
   )
 }

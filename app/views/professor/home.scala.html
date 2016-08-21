@@ -1,4 +1,4 @@
-@(questoes: List[Questao])(implicit flash: Flash)
+@(questoes: List[Questao])(implicit flash: Flash, session: Session)
 
 @main("Bem vindo!") {
   <div class="container">
@@ -9,7 +9,7 @@
         <div class="row">
           <div class="row">
             <div class="col-md-4 col-md-offset-2">
-              <h1>Olá, Gilson.</h1>
+              <h1>Olá, @session.get("nome").</h1>
             </div>
           </div>
 
@@ -42,10 +42,10 @@
                       <td>@questao.enunciado</td>
                       <td>@questao.descricao</td>
                       <td>
-                        <a href="/questoes/@questao.codigo/edit" class="btn btn-default">
+                        <a href="/questoes/@questao.codigo/edit/" class="btn btn-default">
                           Editar
                         </a>
-                        <a href="/questoes/@questao.codigo/" class="btn btn-danger">
+                        <a href="/questoes/@questao.codigo/remove/" class="btn btn-danger">
                           Remover
                         </a>
                       </td>
