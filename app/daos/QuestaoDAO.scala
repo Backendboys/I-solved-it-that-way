@@ -76,4 +76,20 @@ class QuestaoDAO(db: Database) {
     return questao
   }
 
+  def update(instance: Questao): Option[Questao] = {
+    var teste: Questao = null
+    val query = "UPDATE Questao SET (enunciado, descricao) = " +
+      f"('${instance.enunciado}', '${instance.descricao}') " +
+      f"WHERE codigo = ${instance.codigo}"
+    val conn = db.getConnection()
+
+    try {
+      val stmt = conn.createStatement
+      val rs = stmt.executeUpdate(query)
+      return Some(instance)
+    }
+
+    return None
+  }
+
 }
