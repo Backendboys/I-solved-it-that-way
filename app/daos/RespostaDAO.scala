@@ -6,6 +6,7 @@ import scala.collection.immutable.List
 import java.sql.Statement
 import java.io.File
 import java.sql.Timestamp
+import org.joda.time.DateTime
 
 import models.{ Resposta, Teste }
 
@@ -25,9 +26,9 @@ class RespostaDAO(db: Database) {
 
       while(rs.next()) {
         val codigo: Long = rs.getLong("codigo")
-        var dataEnvio: DateTime = DateTime(
+        var dataEnvio: DateTime = new DateTime(
           rs.getTimestamp("dataEnvio").getTime())
-        var dataCompilado: DateTime = DateTime(
+        var dataCompilado: DateTime = new DateTime(
           rs.getTimestamp("dataCompilado").getTime())
         val arquivo: File = new File(rs.getString("arquivo"))
         val nomeAluno: String = rs.getString("nomeAluno")
@@ -45,7 +46,7 @@ class RespostaDAO(db: Database) {
 
   def insert(dataEnvio: DateTime,
       dataCompilado: DateTime, arquivo: File,
-      teste: Teste, nomeAluno: string): Option[Resposta] = {
+      teste: Teste, nomeAluno: String): Option[Resposta] = {
     val dataEnvioTimestamp = new Timestamp(dataEnvio.getMillis())
     val dataCompiladoTimestamp = new Timestamp(dataCompilado.getMillis())
     val query = "INSERT INTO Resposta(dataEnvio, dataCompilado, arquivo" +
@@ -107,9 +108,9 @@ class RespostaDAO(db: Database) {
       rs.next()
 
       val codigo: Long = rs.getLong("codigo")
-      var dataEnvio: DateTime = DateTime(
+      var dataEnvio: DateTime = new DateTime(
         rs.getTimestamp("dataEnvio").getTime())
-      var dataCompilado: DateTime = DateTime(
+      var dataCompilado: DateTime = new DateTime(
         rs.getTimestamp("dataCompilado").getTime())
       val arquivo: File = new File(rs.getString("arquivo"))
       val nomeAluno: String = rs.getString("nomeAluno")
