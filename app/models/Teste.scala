@@ -49,6 +49,7 @@ case class Teste(val codigo: Long, val arquivo: File, var estado: String,
   override def equals(that: Any): Boolean =
     that match {
       case that: String => this.compare(that)
+      case that: Resposta => this.compare(that.toString())
       case _ => false
     }
 }
