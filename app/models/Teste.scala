@@ -4,8 +4,6 @@ import sys.process._
 import scala.io.Source
 import java.io.File
 
-import models.Questao
-
 case class Teste(val codigo: Long, val arquivo: File, var estado: String,
   val questao: Questao) {
 
