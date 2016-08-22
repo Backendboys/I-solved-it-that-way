@@ -1,0 +1,53 @@
+@(questoes: List[QuestaoResposta])(implicit flash: Flash, session: Session)
+
+@main("Bem vindo!") {
+  <div class="container">
+    @flash.get("sucesso").map { mensagem =>
+          <div class="alert alert-success" role="alert">@mensagem</div>
+        }.getOrElse("")
+
+    <div class="row">
+      <div class="row">
+        <div class="col-md-4 col-md-offset-2">
+          <h1>Olá, @session.get("nome").</h1>
+          <h3><a href="/sair/">logout</a></h3>
+        </div>
+      </div>
+
+      <div class="row m-top-30">
+        <div class="col-md-8 col-md-offset-2">
+          <table class="table table-hover">
+            <tr>
+              <th>Enunciado</th>
+              <th>Descrição</th>
+              <th colspan="2">Status</th>
+            </tr>
+            @for(composto <- questoes) {
+              <tr>
+                <td>@composto.questao.enunciado</td>
+                <td>@composto.questao.descricao</td>
+                @if(composto.enviado) {
+                  @composto.estado match {
+                    case "." => { <td class="text-success">Resposta correta</td> }
+                    case "U" => { <td class="text-primary">Em avaliação</td> }
+                    case "C" => { <td class="text-warning">Resposta incorreta (Case-sensitive)</td> }
+                    case "S" => { <td class="text-warning">Resposta incorreta: (Espaços em branco)</td> }
+                    case "CS" => { <td class="text-warning">Resposta incorreta (Case-sensitive, Espaços em branco)</td> }
+                    case _ => { <td class="text-danger">Resposta incorreta</td> }
+                  }
+                } else {
+                  <td class="text-muted">Não respondida</td>
+                }
+                <td>
+                  <a href="/aluno/responder/@composto.questao.codigo/">
+                    <button type="button" class="btn btn-primary">Responder</button>
+                  </a>
+                </td>
+              </tr>
+            }
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  }

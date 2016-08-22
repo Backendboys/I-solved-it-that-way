@@ -1,0 +1,26 @@
+@(loginForm: Form[forms.LoginData])
+
+@main("Tela de Login") {
+  <div class="container">
+    <div class="row">
+        <div class="col-xs-6 col-xs-offset-3">
+            <h2 class="form-signin-heading" contenteditable="false">Login:</h2>
+            <form class="form-signin" role="form" method="POST">
+                <div class="form-group">
+                    <label for="form_nome">Nome</label>
+                    <input id="form_nome" name="nome" class="form-control" type="text">
+                </div>
+                <div class="form-group">
+                    <select class="form-control" name="role">
+                        <option name="role" value="professor">Professor</option>
+                        <option name="role" value="aluno">Aluno</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input class="btn btn-lg btn-primary btn-block" name="logar" value="Confirmar" type="submit"/>
+                </div>
+            </form>
+        </div>
+    </div>
+   </div>
+ }

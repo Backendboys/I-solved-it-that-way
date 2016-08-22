@@ -1,0 +1,48 @@
+@(questaoForm: Form[models.Questao])
+
+@inputText(nome: String, placeholder: String, group: String, classTag: String) = {
+  <label class="@classTag" for="@group">@placeholder</label>
+  <input type="text" class="form-control" name="@nome" id="@group" placeholder="@placeholder">
+}
+
+@inputTextArea(nome: String, placeholder: String, group: String, classTag: String) = {
+  <label class="@classTag" for="@group">@placeholder</label>
+  <textarea rows="10" style="resize: none;" class="form-control" name="@nome" id="@group" placeholder="@placeholder"></textarea>
+}
+
+@inputFileMultiple(nome: String, placeholder: String, group: String, classTag: String) = {
+  <label class="@classTag" for="@group">@placeholder</label>
+  <input type="file" name="@nome" id="@group" multiple>
+}
+
+@main("Cadastrar questão") {
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <h2>Cadastrar questão</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row m-top-15">
+            <form method="POST" enctype="multipart/form-data">
+              <fieldset class="form-group col-xs-6">
+                @inputText("enunciado", "Enunciado", "formGroupExampleInput", "m-top-15")
+                @inputTextArea("descricao", "Descrição", "formGroupExampleInput", "m-top-15")
+                @inputFileMultiple("testes", "Testes", "formGroupExampleInput", "m-top-15")
+                <div class="m-top-15">
+                  <input type="submit" class="btn btn-success" value="Cadastrar">
+                  <a href="/professor/">
+                    <button type="button" class="btn btn-default">Voltar</button>
+                  </a>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+}

@@ -1,0 +1,65 @@
+@(respostaForm: Form[forms.RespostaData])
+
+@inputText(nome: String, placeholder: String, group: String, classTag: String) = {
+  <label class="@classTag" for="@group">@placeholder</label>
+  <input type="text" class="form-control" name="@nome" id="@group" placeholder="@placeholder">
+}
+
+@inputTextArea(nome: String, placeholder: String, group: String, classTag: String) = {
+  <textarea rows="10" style="resize: none;" class="form-control" name="@nome" id="@group" placeholder="@placeholder"></textarea>
+}
+
+@scripts = {
+    <script type="text/javascript" charset="utf-8">
+        var editor = ace.edit('codigo');
+        editor.getSession().setMode('ace/mode/scala');
+
+        $('form').on('submit', function(e) {
+            $('#codigo-area').val(editor.getSession().getValue());
+        });
+
+        $('#compilador').on('change', function() {
+            editor.getSession().setMode('ace/mode/' + $(this).val());
+        });
+    </script>
+}
+
+@main("Cadastrar questão", scripts) {
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <h2>Cadastrar questão</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row m-top-15">
+            <form method="POST" enctype="multipart/form-data">
+              <fieldset class="form-group col-xs-6">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <select name="compilador" id="compilador" class="form-control">
+                          <option value="scala">Scala</option>
+                          @* TODO: Potigol language
+                          <option value="potigol">Potigol</option>
+                          *@
+                          <option value="ruby">Ruby</option>
+                        </select></div>
+                    </div>
+                <div id="codigo" class="margin-top"></div>
+                @inputTextArea("conteudo", "Código", "codigo-area", "m-top-15")
+                <div class="m-top-15">
+                  <input type="submit" class="btn btn-success" value="Enviar">
+                  <a href="/professor/">
+                    <button type="button" class="btn btn-default">Voltar</button>
+                  </a>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,60 @@
+@(questoes: List[Questao])(implicit flash: Flash, session: Session)
+
+@main("Bem vindo!") {
+  <div class="container">
+    @flash.get("sucesso").map { mensagem =>
+          <div class="alert alert-success" role="alert">@mensagem</div>
+        }.getOrElse("")
+
+        <div class="row">
+          <div class="row">
+            <div class="col-md-4 col-md-offset-2">
+              <h1>Olá, @session.get("nome").</h1>
+              <h3><a href="/sair/">logout</a></h3>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 col-md-offset-2">
+              <p>
+                Lista de questões.
+              </p>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 col-md-offset-2">
+              <a href="/questoes/adicionar/">
+                <button type="button" class="btn btn-primary">Nova Questão</button>
+              </a>
+            </div>
+          </div>
+
+          <div class="row m-top-30">
+            <div class="col-md-8 col-md-offset-2">
+              <table class="table table-hover">
+                <tr>
+                  <th>Enunciado</th>
+                  <th>Descrição</th>
+                  <th></th>
+                </tr>
+                @for(questao <- questoes) {
+                    <tr>
+                      <td>@questao.enunciado</td>
+                      <td>@questao.descricao</td>
+                      <td>
+                        <a href="/questoes/@questao.codigo/edit/" class="btn btn-default">
+                          Editar
+                        </a>
+                        <a href="/questoes/@questao.codigo/remove/" class="btn btn-danger">
+                          Remover
+                        </a>
+                      </td>
+                    </tr>
+                }
+              </table>
+            </div>
+          </div>
+        </div>
+  </div>
+}
