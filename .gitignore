@@ -36,3 +36,4 @@ project/boot/
 
 conf/local.conf
 app/testfiles/**/*
+app/respostas/**/**/*

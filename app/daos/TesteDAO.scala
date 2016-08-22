@@ -25,11 +25,10 @@ class TesteDAO(db: Database) {
       while(rs.next()) {
         val codigo: Long = rs.getLong("codigo")
         val arquivo: File = new File(rs.getString("arquivo"))
-        val estado: String = rs.getString("estado")
         val questao_codigo: Long = rs.getLong("questao_codigo")
         val questao = new QuestaoDAO(db).get(questao_codigo)
 
-        testes = new Teste(codigo, arquivo, estado, questao) :: testes
+        testes = new Teste(codigo, arquivo, questao) :: testes
       }
     } finally {
       conn.close()
@@ -38,10 +37,10 @@ class TesteDAO(db: Database) {
     return testes
   }
 
-  def insert(arquivo: File, estado: String,
+  def insert(arquivo: File,
     questao: Questao): Option[Teste] = {
-    val query = "INSERT INTO Teste(arquivo, estado, questao_codigo) VALUES (" +
-      f"'${arquivo.getPath()}', '$estado', '${questao.codigo}')"
+    val query = "INSERT INTO Teste(arquivo, questao_codigo) VALUES (" +
+      f"'${arquivo.getPath()}', '${questao.codigo}')"
     val conn = db.getConnection()
 
     var teste: Option[Teste] = None
@@ -52,7 +51,7 @@ class TesteDAO(db: Database) {
       val rs = stmt.getGeneratedKeys()
       while(rs.next()) {
         val codigo = rs.getInt(1)
-        teste = Some(new Teste(codigo, arquivo, estado, questao))
+        teste = Some(new Teste(codigo, arquivo, questao))
       }
     } finally {
       conn.close()
@@ -96,11 +95,10 @@ class TesteDAO(db: Database) {
 
       val codigo: Long = rs.getLong("codigo")
       val arquivo: File = new File(rs.getString("arquivo"))
-      val estado: String = rs.getString("estado")
       val questao_codigo: Long = rs.getLong("questao_codigo")
       val questao = new QuestaoDAO(db).get(questao_codigo)
 
-      teste = new Teste(codigo, arquivo, estado, questao)
+      teste = new Teste(codigo, arquivo, questao)
 
       return teste
     }
@@ -108,8 +106,8 @@ class TesteDAO(db: Database) {
 
   def update(instance: Teste): Option[Teste] = {
     var teste: Teste = null
-    val query = "UPDATE Teste SET (arquivo, estado, questao_codigo) = " +
-      f"('${instance.arquivo.getPath()}', '${instance.estado}', " +
+    val query = "UPDATE Teste SET (arquivo, questao_codigo) = " +
+      f"('${instance.arquivo.getPath()}', " +
       f"${instance.questao.codigo}) WHERE codigo = ${instance.codigo}"
     val conn = db.getConnection()
 

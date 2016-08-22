@@ -52,7 +52,7 @@ class QuestaoController @Inject()(db: Database) extends Controller {
                   dir.mkdirs()
                   val newFile = new File(dir.getPath() + "/" + f"$index%02d")
                   index += 1
-                  val teste: Option[Teste] = testeDao.insert(newFile, "U", value)
+                  val teste: Option[Teste] = testeDao.insert(newFile, value)
                   file.ref.moveTo(newFile)
               }
             }
@@ -111,7 +111,7 @@ class QuestaoController @Inject()(db: Database) extends Controller {
                   dir.mkdirs()
                   val newFile = new File(dir.getPath() + "/" + f"$index%02d")
                   index += 1
-                  val teste: Option[Teste] = testeDao.insert(newFile, "U", value)
+                  val teste: Option[Teste] = testeDao.insert(newFile, value)
                   file.ref.moveTo(newFile)
               }
             }

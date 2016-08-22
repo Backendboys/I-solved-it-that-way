@@ -67,14 +67,15 @@ class QuestaoDAO(db: Database) {
   }
 
   def insert(enunciado: String, descricao: String): Option[Questao] = {
-    val query = "INSERT INTO Questao(enunciado, descricao) VALUES (" +
-      f"'$enunciado', '$descricao')"
+    val query = "INSERT INTO Questao(enunciado, descricao) VALUES (?, ?)"
     val conn = db.getConnection()
 
     var questao: Option[Questao] = None
 
     try {
       val stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)
+      stmt.setString(1, enunciado)
+      stmt.setString(2, descricao)
       stmt.executeUpdate()
       val rs = stmt.getGeneratedKeys()
       while(rs.next()) {
@@ -89,15 +90,15 @@ class QuestaoDAO(db: Database) {
   }
 
   def update(instance: Questao): Option[Questao] = {
-    var teste: Questao = null
-    val query = "UPDATE Questao SET (enunciado, descricao) = " +
-      f"('${instance.enunciado}', '${instance.descricao}') " +
+    val query = "UPDATE Questao SET (enunciado, descricao) = (?, ?)" +
       f"WHERE codigo = ${instance.codigo}"
     val conn = db.getConnection()
 
     try {
-      val stmt = conn.createStatement
-      val rs = stmt.executeUpdate(query)
+      val stmt = conn.prepareStatement(query)
+      stmt.setString(1, instance.enunciado)
+      stmt.setString(2, instance.descricao)
+      val rs = stmt.executeUpdate()
       return Some(instance)
     }
 
