@@ -1,9 +1,10 @@
-@(title: String)(content: Html)
+@(title: String, scripts: Html = Html(""))(content: Html)
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <title>@title | I Solved It That Way</title>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     @* THIRD-PARTY STYLES *@
     <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("lib/bootstrap/css/bootstrap.min.css")">
 
@@ -17,8 +18,11 @@
     @* THIRD-PARTY SCRIPTS *@
     <script src="@routes.Assets.versioned("lib/jquery/jquery.min.js")" type="text/javascript" charset="utf-8"></script>
     <script src="@routes.Assets.versioned("lib/bootstrap/js/bootstrap.js")" type="text/javascript" charset="utf-8"></script>
+    <script src="@routes.Assets.versioned("lib/bootstrap/js/bootstrap.js")" type="text/javascript" charset="utf-8"></script>
+    <script src="@routes.Assets.versioned("lib/ace/src-min/ace.js")" type="text/javascript" charset="utf-8"></script>
 
     @* SCRIPTS *@
+    @scripts
 </body>
 </html>
 

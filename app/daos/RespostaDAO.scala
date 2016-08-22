@@ -8,14 +8,14 @@ import java.io.File
 import java.sql.Timestamp
 import org.joda.time.DateTime
 
-import models.{ Resposta, Teste }
+import models.{ Resposta, Questao }
 
 class RespostaDAO(db: Database) {
 
-  def list(teste_codigo: Option[Long] = None): List[Resposta] = {
+  def list(questao_codigo: Option[Long] = None): List[Resposta] = {
     var respostas: List[Resposta] = List()
-    val query = teste_codigo match {
-      case Some(value) => f"SELECT * FROM Resposta WHERE teste_codigo = $value"
+    val query = questao_codigo match {
+      case Some(value) => f"SELECT * FROM Resposta WHERE questao_codigo = $value"
       case None => "SELECT * FROM Resposta"
     }
     val conn = db.getConnection()
@@ -26,16 +26,24 @@ class RespostaDAO(db: Database) {
 
       while(rs.next()) {
         val codigo: Long = rs.getLong("codigo")
+        val compilador: String = rs.getString("compilador")
+        val estado: String = rs.getString("estado")
         var dataEnvio: DateTime = new DateTime(
           rs.getTimestamp("dataEnvio").getTime())
-        var dataCompilado: DateTime = new DateTime(
-          rs.getTimestamp("dataCompilado").getTime())
+        var dataCompiladoStamp =
+          rs.getTimestamp("dataCompilado")
+        var dataCompilado: Option[DateTime] = None
+        if (!rs.wasNull()) {
+          dataCompilado = Some(new DateTime(
+            dataCompiladoStamp.getTime()))
+        }
         val arquivo: File = new File(rs.getString("arquivo"))
         val nomeAluno: String = rs.getString("nomeAluno")
-        val teste_codigo: Long = rs.getLong("teste_codigo")
-        val teste = new TesteDAO(db).get(teste_codigo)
+        val questao_codigo: Long = rs.getLong("questao_codigo")
+        val questao = new QuestaoDAO(db).get(questao_codigo)
 
-        respostas = new Resposta(codigo, dataEnvio, dataCompilado, arquivo, teste, nomeAluno) :: respostas
+        respostas = new Resposta(codigo, compilador, estado, dataEnvio,
+          dataCompilado, arquivo, questao, nomeAluno) :: respostas
       }
     } finally {
       conn.close()
@@ -44,28 +52,45 @@ class RespostaDAO(db: Database) {
     return respostas
   }
 
-  def insert(dataEnvio: DateTime,
-      dataCompilado: DateTime, arquivo: File,
-      teste: Teste, nomeAluno: String): Option[Resposta] = {
+  def insert(compilador: String, estado: String, dataEnvio: DateTime,
+      dataCompilado: Option[DateTime], arquivo: File,
+      questao: Questao, nomeAluno: String): Option[Resposta] = {
     val dataEnvioTimestamp = new Timestamp(dataEnvio.getMillis())
-    val dataCompiladoTimestamp = new Timestamp(dataCompilado.getMillis())
-    val query = "INSERT INTO Resposta(dataEnvio, dataCompilado, arquivo" +
-      "teste_codigo, nomeAluno) VALUES (?, ?, " +
-      f"'${arquivo.getPath()}', '${teste.codigo}', '$nomeAluno'" + ")"
+    var dataCompiladoVStr = ""
+    var dataCompiladoCStr = ""
+    var dataCompiladoTimestamp: Timestamp = null
+    dataCompilado match {
+      case Some(date) => {
+        dataCompiladoCStr = "dataCompilado, "
+        dataCompiladoVStr = "?, "
+        dataCompiladoTimestamp = new Timestamp(date.getMillis())
+      }
+      case None =>
+    }
+    val query = "INSERT INTO Resposta(compilador, estado, dataEnvio, " +
+      f"$dataCompiladoCStr arquivo, questao_codigo, nomeAluno) VALUES " +
+      f"(?, '$estado', ?, $dataCompiladoVStr '${arquivo.getPath()}', '${questao.codigo}', ?)"
     val conn = db.getConnection()
 
     var resposta: Option[Resposta] = None
 
     try {
       val stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)
-      stmt.setTimestamp(1, dataEnvioTimestamp)
-      stmt.setTimestamp(2, dataCompiladoTimestamp)
+      stmt.setString(1, compilador)
+      stmt.setTimestamp(2, dataEnvioTimestamp)
+      dataCompilado match {
+        case Some(date) => {
+          stmt.setTimestamp(3, dataCompiladoTimestamp)
+          stmt.setString(4, nomeAluno)
+        }
+        case None => stmt.setString(3, nomeAluno)
+      }
       stmt.executeUpdate()
       val rs = stmt.getGeneratedKeys()
       while(rs.next()) {
         val codigo = rs.getInt(1)
-        resposta = Some(new Resposta(codigo, dataEnvio, dataCompilado,
-          arquivo, teste, nomeAluno))
+        resposta = Some(new Resposta(codigo, compilador, estado, dataEnvio,
+          dataCompilado, arquivo, questao, nomeAluno))
       }
     } finally {
       conn.close()
@@ -74,11 +99,60 @@ class RespostaDAO(db: Database) {
     return resposta
   }
 
-  def count(teste_codigo: Option[Long] = None): Int = {
+  def update(instance: Resposta): Option[Resposta] = {
+    val dataEnvioTimestamp = new Timestamp(instance.dataEnvio.getMillis())
+    var dataCompiladoVStr = ""
+    var dataCompiladoCStr = ""
+    var dataCompiladoTimestamp: Timestamp = null
+    instance.dataCompilado match {
+      case Some(date) => {
+        dataCompiladoCStr = "dataCompilado, "
+        dataCompiladoVStr = "?, "
+        dataCompiladoTimestamp = new Timestamp(date.getMillis())
+      }
+      case None =>
+    }
+    val query = "UPDATE Resposta SET (compilador, estado, dataEnvio, " +
+      f"$dataCompiladoCStr arquivo, questao_codigo, nomeAluno) = " +
+      f"(?, ?, ?, $dataCompiladoVStr ?, ?, ?) WHERE codigo = ${instance.codigo}"
+    val conn = db.getConnection()
+
+    var resposta: Option[Resposta] = None
+
+    try {
+      val stmt = conn.prepareStatement(query)
+      stmt.setString(1, instance.compilador)
+      stmt.setString(2, instance.estado)
+      stmt.setTimestamp(3, dataEnvioTimestamp)
+      instance.dataCompilado match {
+        case Some(date) => {
+          stmt.setTimestamp(4, dataCompiladoTimestamp)
+          stmt.setString(5, instance.arquivo.getPath())
+          stmt.setLong(6, instance.questao.codigo)
+          stmt.setString(7, instance.nomeAluno)
+        }
+        case None => {
+          stmt.setString(4, instance.arquivo.getPath())
+          stmt.setLong(5, instance.questao.codigo)
+          stmt.setString(6, instance.nomeAluno)
+        }
+      }
+      val rs = stmt.executeUpdate()
+      return Some(instance)
+    } finally {
+      conn.close()
+    }
+
+    return None
+  }
+
+
+
+  def count(questao_codigo: Option[Long] = None): Int = {
     var total = 0
-    val query = teste_codigo match {
+    val query = questao_codigo match {
       case Some(value) => "SELECT count(codigo) AS total FROM Resposta WHERE " +
-      f"teste_codigo = $value"
+      f"questao_codigo = $value"
       case None => "SELECT count(codigo) AS total FROM Resposta"
     }
     val conn = db.getConnection()
@@ -108,16 +182,24 @@ class RespostaDAO(db: Database) {
       rs.next()
 
       val codigo: Long = rs.getLong("codigo")
+      val compilador: String = rs.getString("compilador")
+      val estado: String = rs.getString("estado")
       var dataEnvio: DateTime = new DateTime(
         rs.getTimestamp("dataEnvio").getTime())
-      var dataCompilado: DateTime = new DateTime(
-        rs.getTimestamp("dataCompilado").getTime())
+      var dataCompiladoStamp =
+          rs.getTimestamp("dataCompilado")
+      var dataCompilado: Option[DateTime] = None
+      if (!rs.wasNull()) {
+        dataCompilado = Some(new DateTime(
+          dataCompiladoStamp.getTime()))
+      }
       val arquivo: File = new File(rs.getString("arquivo"))
       val nomeAluno: String = rs.getString("nomeAluno")
-      val teste_codigo: Long = rs.getLong("teste_codigo")
-      val teste = new TesteDAO(db).get(teste_codigo)
+      val questao_codigo: Long = rs.getLong("questao_codigo")
+      val questao = new QuestaoDAO(db).get(questao_codigo)
 
-      resposta = new Resposta(codigo, dataEnvio, dataCompilado, arquivo, teste, nomeAluno)
+      resposta = new Resposta(codigo, compilador, estado, dataEnvio,
+        dataCompilado, arquivo, questao, nomeAluno)
 
       return resposta
     }

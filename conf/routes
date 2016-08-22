@@ -19,6 +19,8 @@ GET     /professor/                  controllers.ProfessorController.home
 # --- ALUNO ---
 # home
 GET     /aluno/                      controllers.AlunoController.home
+GET     /aluno/responder/:codigo/    controllers.AlunoController.responder(codigo: Long)
+POST    /aluno/responder/:codigo/    controllers.AlunoController.submit(codigo: Long)
 # logout
 GET     /sair/                       controllers.AuthController.logout
 
